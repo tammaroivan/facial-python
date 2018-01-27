@@ -14,21 +14,16 @@ import cv2
 video_capture = cv2.VideoCapture(0)
 
 # Load a sample picture and learn how to recognize it.
-obama_image = face_recognition.load_image_file("me.jpg")
-obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
+#me = face_recognition.load_image_file("me.jpg")
+#me_face_encoding = face_recognition.face_encodings(me)[0]
 
-# Load a second sample picture and learn how to recognize it.
-biden_image = face_recognition.load_image_file("ivan.jpg")
-biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
 
 # Create arrays of known face encodings and their names
 known_face_encodings = [
-    obama_face_encoding,
-    biden_face_encoding
+    #me_face_encoding
 ]
 known_face_names = [
-    "Ivan",
-    "Ivan el trolaso"
+    #"Ivan"
 ]
 
 # Initialize some variables
@@ -89,8 +84,14 @@ while True:
             crop_img = frame[top: bottom, left : right]
             #cv2.imshow("cropped", crop_img)
             
-            cv2.imwrite("cara-"+str(Unknowns)+".jpg", crop_img)
-            Unknowns+=1
+            cv2.imwrite("unk/cara-"+str(Unknowns)+".jpg", crop_img)
+            unk = face_recognition.load_image_file("unk/cara-"+str(Unknowns)+".jpg")
+            unk_face_encoding = face_recognition.face_encodings(unk)
+            if len(unk_face_encoding)>0:
+                known_face_encodings.append(unk_face_encoding[0])
+                known_face_names.append("cara-"+str(Unknowns))
+                Unknowns+=1
+            
 
         # Draw a label with a name below the face
         cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
